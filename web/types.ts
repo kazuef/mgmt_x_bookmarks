@@ -32,3 +32,15 @@ export interface ApiBookmark {
 export interface FetchBookmarksResponse {
   bookmarks: ApiBookmark[];
 }
+
+// カテゴリの型定義
+export interface Category {
+  id: number;
+  name: string;
+  created_at: string;
+}
+
+// カテゴリレスポンスの型定義
+export interface FetchCategoriesResponse {
+  categories: Category[];
+}

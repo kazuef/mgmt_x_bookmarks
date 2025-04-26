@@ -10,7 +10,7 @@ import { fetchBookmarks } from '../../services/api';
 import { ApiBookmark, FetchBookmarksResponse } from '../../types';
 
 export default function BookmarksScreen() {
-  const { isSidebarOpen, toggleSidebar } = useBookmarkStore();
+  const { isSidebarOpen, toggleSidebar, fetchCategories } = useBookmarkStore();
   // 新しいstate
   const [bookmarksRes, setBookmarksRes] = useState<FetchBookmarksResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,9 @@ export default function BookmarksScreen() {
     };
 
     loadBookmarks();
-  }, []);
+    // カテゴリ一覧も取得
+    fetchCategories();
+  }, [fetchCategories]);
 
   useEffect(() => {
     console.log("data_index", bookmarksRes);

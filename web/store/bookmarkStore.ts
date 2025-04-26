@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { bookmarks as initialBookmarks, Bookmark, folders as initialFolders, filters as initialFilters } from '../mocks/bookmarks';
+import { Category } from '../types';
+import { fetchCategories as apiFetchCategories } from '../services/api';
 
 interface Folder {
   id: string;
@@ -17,6 +19,7 @@ interface BookmarkState {
   bookmarks: Bookmark[];
   folders: Folder[];
   filters: Filter[];
+  categories: Category[];
   selectedFolder: string | null;
   selectedFilter: string | null;
   searchQuery: string;
@@ -33,6 +36,8 @@ interface BookmarkState {
   removeFolder: (folderId: string) => void;
   addBookmarkToFolder: (bookmarkId: string, folderId: string) => void;
   removeBookmarkFromFolder: (bookmarkId: string, folderId: string) => void;
+  setCategories: (cats: Category[]) => void;
+  fetchCategories: () => Promise<void>;
   
   // Computed
   filteredBookmarks: () => Bookmark[];
@@ -44,6 +49,7 @@ export const useBookmarkStore = create<BookmarkState>()(
       bookmarks: initialBookmarks,
       folders: initialFolders,
       filters: initialFilters,
+      categories: [],
       selectedFolder: null,
       selectedFilter: null,
       searchQuery: '',
@@ -62,6 +68,19 @@ export const useBookmarkStore = create<BookmarkState>()(
         selectedFilter: filterId, 
         selectedFolder: null 
       }),
+      
+      setCategories: (cats) => set({ categories: cats }),
+      
+      fetchCategories: async () => {
+        try {
+          const { categories } = await apiFetchCategories();
+          set({ categories });
+          // ストア内の filters を動的に置き換え
+          set({ filters: categories.map(c => ({ id: c.id.toString(), name: c.name })) });
+        } catch (e) {
+          console.error('カテゴリ取得失敗:', e);
+        }
+      },
       
       addBookmark: (bookmark) => set((state) => ({ 
         bookmarks: [...state.bookmarks, bookmark] 

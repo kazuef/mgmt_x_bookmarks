@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiBookmark, FetchBookmarksResponse } from '../types';
+import { ApiBookmark, FetchBookmarksResponse, FetchCategoriesResponse } from '../types';
 
 // Axiosインスタンスを作成し、ベースURLとタイムアウトを設定
 export const api = axios.create({
@@ -16,4 +16,10 @@ export const fetchBookmarks = async (): Promise<FetchBookmarksResponse> => {
     console.error('Failed to fetch bookmarks:', error);
     throw error;
   }
+};
+
+// カテゴリ取得関数
+export const fetchCategories = async (): Promise<FetchCategoriesResponse> => {
+  const res = await api.get<FetchCategoriesResponse>('/bookmarks/categories');
+  return res.data;
 };
