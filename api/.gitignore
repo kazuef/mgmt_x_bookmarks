@@ -1,0 +1,7 @@
+bookmarks_categorize/env/.env
+__pycache__
+repomix-output.xml
+
+# SQLite DBファイル
+*.db
+*.sqlite3
