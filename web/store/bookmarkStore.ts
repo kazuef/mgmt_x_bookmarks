@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { bookmarks as initialBookmarks, Bookmark, folders as initialFolders, filters as initialFilters } from '../mocks/bookmarks';
-import { Category } from '../types';
+import { Category } from '../types/app';
 import { fetchCategories as apiFetchCategories } from '../services/api';
 
 interface Folder {

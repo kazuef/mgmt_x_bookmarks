@@ -7,7 +7,7 @@ import Sidebar from '../../components/Sidebar';
 import Colors from '../../constants/colors';
 // 新しいインポート
 import { fetchBookmarks } from '../../services/api';
-import { ApiBookmark, FetchBookmarksResponse } from '../../types';
+import { ApiBookmark, FetchBookmarksResponse } from '../../types/app';
 
 export default function BookmarksScreen() {
   const { isSidebarOpen, toggleSidebar, fetchCategories } = useBookmarkStore();

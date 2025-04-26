@@ -3,7 +3,7 @@ import { StyleSheet, FlatList, View, Text, ActivityIndicator, Image, TouchableOp
 import { useBookmarkStore } from '../store/bookmarkStore';
 import BookmarkItem from './BookmarkItem';
 import Colors from '../constants/colors';
-import { ApiBookmark, FetchBookmarksResponse } from '../types';
+import { ApiBookmark, FetchBookmarksResponse } from '../types/app';
 import { Linking } from 'react-native';
 
 interface BookmarkListProps {

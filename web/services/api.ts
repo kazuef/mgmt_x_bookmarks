@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiBookmark, FetchBookmarksResponse, FetchCategoriesResponse } from '../types';
+import { ApiBookmark, FetchBookmarksResponse, FetchCategoriesResponse } from '../types/app';
 
 // Axiosインスタンスを作成し、ベースURLとタイムアウトを設定
 export const api = axios.create({
