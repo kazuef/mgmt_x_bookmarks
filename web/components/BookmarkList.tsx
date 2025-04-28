@@ -141,8 +141,11 @@ const BookmarkList = ({ data, isLoading, error }: BookmarkListProps) => {
             contentContainerStyle={styles.list}
             ListEmptyComponent={renderEmptyList}
           />
+        ) : (selectedFolder || selectedFilter) ? (
+          // フィルタリングが適用されている場合は直接「No bookmarks found」を表示
+          renderEmptyList()
         ) : (
-          // Zustandデータ表示（既存の処理）
+          // フィルタリングがない場合はZustandデータを表示（既存の処理）
           <FlatList
             data={storeBookmarks}
             keyExtractor={(item) => item.id}

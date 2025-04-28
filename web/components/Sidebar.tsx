@@ -35,8 +35,26 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     selectedFolder, 
     selectedFilter,
     selectFolder,
-    selectFilter
+    selectFilter,
+    addFilter
   } = useBookmarkStore();
+  
+  const handleAddFilter = () => {
+    // フィルター名の入力を促す
+    // Note: promptはウェブ環境では動作しますが、ネイティブ環境では別の実装が必要
+    const filterName = prompt('新しいフィルター名を入力してください:');
+    if (filterName && filterName.trim() !== '') {
+      addFilter(filterName.trim())
+        .then(() => {
+          // 成功時の処理
+          alert(`フィルター「${filterName}」を追加しました`);
+        })
+        .catch(error => {
+          // エラー時の処理
+          alert(`フィルターの追加に失敗しました: ${error.message}`);
+        });
+    }
+  };
 
   const translateX = React.useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
 
@@ -109,6 +127,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Filters</Text>
+              <TouchableOpacity style={styles.addButton} onPress={handleAddFilter}>
+                <Plus size={18} color={Colors.primary} />
+              </TouchableOpacity>
             </View>
             
             {filters.map(filter => (

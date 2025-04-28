@@ -3,7 +3,8 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { bookmarks as initialBookmarks, Bookmark, folders as initialFolders, filters as initialFilters } from '../mocks/bookmarks';
 import { Category } from '../types/app';
-import { fetchCategories as apiFetchCategories } from '../services/api';
+import { fetchCategories as apiFetchCategories, addCategory as apiAddCategory, fetchBookmarks } from '../services/api';
+import { FetchBookmarksResponse } from '../types/app';
 
 interface Folder {
   id: string;
@@ -38,6 +39,8 @@ interface BookmarkState {
   removeBookmarkFromFolder: (bookmarkId: string, folderId: string) => void;
   setCategories: (cats: Category[]) => void;
   fetchCategories: () => Promise<void>;
+  addFilter: (name: string) => Promise<void>;
+  fetchBookmarksByFilter: (filterId: string | null) => Promise<FetchBookmarksResponse>;
   
   // Computed
   filteredBookmarks: () => Bookmark[];
@@ -127,6 +130,40 @@ export const useBookmarkStore = create<BookmarkState>()(
             : bookmark
         )
       })),
+      
+      addFilter: async (name) => {
+        try {
+          // APIを呼び出してカテゴリを追加
+          const { category } = await apiAddCategory(name);
+          // 成功したらストアのfiltersを更新
+          set((state) => ({ 
+            filters: [...state.filters, { 
+              id: category.id.toString(), 
+              name: category.name 
+            }] 
+          }));
+        } catch (e) {
+          console.error('フィルター追加失敗:', e);
+          throw e;
+        }
+      },
+      
+      fetchBookmarksByFilter: async (filterId) => {
+        try {
+          // filtersから選択されたフィルターに対応するカテゴリIDを取得
+          let categoryId: number | undefined = undefined;
+          if (filterId) {
+            categoryId = parseInt(filterId);
+          }
+          
+          // APIからデータを取得
+          const response = await fetchBookmarks(categoryId);
+          return response;
+        } catch (e) {
+          console.error('ブックマーク取得失敗:', e);
+          throw e;
+        }
+      },
       
       filteredBookmarks: () => {
         const { bookmarks, selectedFolder, selectedFilter, searchQuery } = get();

@@ -2,8 +2,12 @@ import ast
 import json
 import uuid
 from fastapi import APIRouter, File, UploadFile, HTTPException
+from pydantic import BaseModel
 from ..modules.bookmark import DifyModule
 from ..modules.crud import get_or_create_category, insert_bookmark, get_bookmarks_by_category, get_all_categories
+
+class CategoryCreate(BaseModel):
+    name: str
 
 router = APIRouter()
 
@@ -70,3 +74,17 @@ async def get_bookmarks(category_id: int = None):
         return {"bookmarks": bookmarks}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"ブックマーク取得エラー: {str(e)}")
+
+@router.post("/categories")
+async def create_category(category: CategoryCreate):
+    """新しいカテゴリを作成する"""
+    try:
+        category_id = get_or_create_category(category.name)
+        # 作成したカテゴリを取得
+        categories = get_all_categories()
+        for cat in categories:
+            if cat["id"] == category_id:
+                return {"category": cat}
+        raise HTTPException(status_code=500, detail="カテゴリの作成に成功しましたが、取得に失敗しました")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"カテゴリ作成エラー: {str(e)}")

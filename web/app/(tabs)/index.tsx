@@ -5,24 +5,29 @@ import SearchBar from '../../components/SearchBar';
 import BookmarkList from '../../components/BookmarkList';
 import Sidebar from '../../components/Sidebar';
 import Colors from '../../constants/colors';
-// 新しいインポート
-import { fetchBookmarks } from '../../services/api';
-import { ApiBookmark, FetchBookmarksResponse } from '../../types/app';
+import { FetchBookmarksResponse } from '../../types/app';
 
 export default function BookmarksScreen() {
-  const { isSidebarOpen, toggleSidebar, fetchCategories } = useBookmarkStore();
+  const { 
+    isSidebarOpen, 
+    toggleSidebar, 
+    fetchCategories, 
+    selectedFilter,
+    fetchBookmarksByFilter 
+  } = useBookmarkStore();
+  
   // 新しいstate
   const [bookmarksRes, setBookmarksRes] = useState<FetchBookmarksResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // APIからのデータ取得
+  // APIからのデータ取得 - フィルター変更時にも再取得
   useEffect(() => {
     const loadBookmarks = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await fetchBookmarks();
+        const data = await fetchBookmarksByFilter(selectedFilter);
         console.log('Fetched bookmarks:', data);
         setBookmarksRes(data);
       } catch (err) {
@@ -34,7 +39,11 @@ export default function BookmarksScreen() {
     };
 
     loadBookmarks();
-    // カテゴリ一覧も取得
+    // カテゴリ一覧も取得（初回のみ）
+  }, [fetchBookmarksByFilter, selectedFilter]);
+
+  // カテゴリ一覧の取得は別のuseEffectで行う
+  useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
 
