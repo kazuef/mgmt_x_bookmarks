@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class DifyApiKeySettings(BaseSettings):
     model_config = SettingsConfigDict(
         # env_prefix='DIFY_API_KEY_',
-        env_file="env/.env",
+        env_file="bookmarks_categorize/env/.env",
         env_file_encoding="utf-8",
     )
 
