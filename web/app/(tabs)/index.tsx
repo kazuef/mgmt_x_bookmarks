@@ -51,19 +51,6 @@ export default function BookmarksScreen() {
     console.log("data_index", bookmarksRes);
   }, [bookmarksRes]);
 
-  //   以前のコード（参考用）
-  //   const [bookmarks, setBookmarks] = useState([]);
-  //   useEffect(() => {
-  //     const fetchBookmarks = async () => {
-  //       try {
-  //         const res = await axios.get('http://your-api-url/bookmarks');
-  //         setBookmarks(res.data); // データを保存
-  //       } catch (err) {
-  //         console.error('Failed to fetch bookmarks:', err);
-  //       }
-  //     };
-  //     fetchBookmarks();
-  //   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
