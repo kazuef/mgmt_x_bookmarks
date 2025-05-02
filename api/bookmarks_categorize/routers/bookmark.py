@@ -5,6 +5,7 @@ from fastapi import APIRouter, File, UploadFile, HTTPException
 from pydantic import BaseModel
 from ..modules.bookmark import DifyModule
 from ..modules.crud import get_or_create_category, insert_bookmark, get_bookmarks_by_category, get_all_categories
+from ..schemas.bookmark import Request, Response
 
 class CategoryCreate(BaseModel):
     name: str
@@ -13,6 +14,7 @@ router = APIRouter()
 
 difyModule = DifyModule()
 
+# , response_model=Response.categorizeBookmark
 @router.post("/categorize")
 async def categorize_bookmarks(file: UploadFile = File(...)):
     # ファイルの内容を読み込む
