@@ -15,7 +15,14 @@ streamlit = "^1.43.2"
 pydantic = "^2.11.0"
 pydantic-settings = "^2.8.1"
 python-multipart = "^0.0.20"
+requests-auth = "^8.0.0"
+requests-oauthlib = "^2.0.0"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+httpx = "^0.28.1"
 
 [build-system]
 requires = ["poetry-core"]

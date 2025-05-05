@@ -40,3 +40,19 @@ export const addCategory = async (name: string): Promise<AddCategoryResponse> =>
     throw error;
   }
 };
+
+/**
+ * JSON ファイルを /bookmarks/categorize に POST する
+ * @param formData FormData（file フィールドに JSON ファイルをセット）
+ */
+export const categorizeBookmarks = async (formData: FormData) => {
+  try {
+    const res = await api.post('/bookmarks/categorize', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return res.data;
+  } catch (error) {
+    console.error('Failed to categorize bookmarks:', error);
+    throw error;
+  }
+};

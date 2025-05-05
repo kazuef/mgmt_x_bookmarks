@@ -3,16 +3,32 @@ import json
 import uuid
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from pydantic import BaseModel
-from ..modules.bookmark import DifyModule
+from ..modules.dify import DifyModule
+from ..modules.x import XModule
 from ..modules.crud import get_or_create_category, insert_bookmark, get_bookmarks_by_category, get_all_categories
 from ..schemas.bookmark import Request, Response
+from ..config import Settings
 
 class CategoryCreate(BaseModel):
     name: str
 
 router = APIRouter()
 
-difyModule = DifyModule()
+settings = Settings()
+
+difyModule = DifyModule(
+    dify_api_key_categorize_json = settings.dify_api_key_categorize_json,
+    dify_api_key_csv_to_json = settings.dify_api_key_csv_to_json,
+    dify_base_url = settings.dify_base_url,
+    dify_user = settings.dify_user
+)
+
+xModule = XModule(
+    client_id = settings.x_client_id,
+    client_secret = settings.x_client_secret,
+    redirect_uri = settings.x_redirect_uri,
+    scopes = settings.x_scopes
+)
 
 # , response_model=Response.categorizeBookmark
 @router.post("/categorize")
